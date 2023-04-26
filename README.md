@@ -19,5 +19,5 @@ Separation of code is not followed due to the number of files being quite few co
 1. React.js 18
 2. Vite
 3. Bootstrap 5
-4. ECMA
+4. ECMA Script
 5. React Modules
