@@ -2,6 +2,15 @@
 
 ## Bookstore with React.js + Vite + Bootstrap
 
+## Frontend Routes
+
+1. "/" : Bookstore Search page
+2. "/book/:id" : Book details page
+3. "/admin" : Admin Login page
+4. "/admin/book" : Admin Bookstore management page
+
+## Overview
+
 This Application contains a main page where user can search for book titles with filters that includes title, author, genre, ISBN, Published date and Publisher. Additionally, Pagination is added that is handled by API itself instead of React Datatable. For styling purpose basic bootstrap classes are used for all components.
 
 By clicking Book Title, User will be redirected to the book details page where all information regarding a book will be furnished.
@@ -14,7 +23,7 @@ For authentication purposes, Cookie is set with the help of a token that is rece
 
 Separation of code is not followed due to the number of files being quite few compared to production-level applications. Hence, codes related to API calls are in the same files as Components instead of "hooks" or "utilities".
 
-# Technology
+## Technology
 
 1. React.js 18
 2. Vite
