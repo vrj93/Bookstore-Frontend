@@ -39,7 +39,7 @@ const DataTable = () => {
 
   const config = {
     headers: {
-      Accpect: "application/json",
+      Accept: "application/json",
       "Content-Type": "application/json",
       Authorization: `Bearer ${Cookies.get("auth_token")}`,
     },
