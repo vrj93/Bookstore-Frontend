@@ -51,7 +51,7 @@ const AdminLogin = () => {
       const res = await fetch("http://localhost:8000/api/v1/admin/login", {
         method: "POST",
         headers: {
-          Accpect: "application/json",
+          Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
