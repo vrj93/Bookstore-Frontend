@@ -194,13 +194,8 @@ const DataTable = () => {
   useEffect(() => {
     if (selectSearchText !== "") {
       const newURLParam = `${selectedOption.toLowerCase()}=${selectSearchText}&paginate=${selectPerPage}&sortname=${selectOrderName}&sortorder=${selectOrderType}`;
-      const searchString = "title=&paginate=Per Page&sortname=&sortorder=asc";
 
       setURLParams(newURLParam);
-
-      if (searchString !== selectURLParams && selectURLParams != "") {
-        fetchBooks("http://localhost:8000/api/v1/book");
-      }
     }
   }, [
     selectedOption,
@@ -208,8 +203,15 @@ const DataTable = () => {
     selectPerPage,
     selectOrderName,
     selectOrderType,
-    selectURLParams,
   ]);
+
+  useEffect(() => {
+    const searchString = "title=&paginate=Per Page&sortname=&sortorder=asc";
+
+    if (selectURLParams != searchString && selectURLParams != "") {
+      fetchBooks("http://localhost:8000/api/v1/book");
+    }
+  }, [selectURLParams]);
 
   const previousPage = async () => {
     await fetchBooks(links.prev);
