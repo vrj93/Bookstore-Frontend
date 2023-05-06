@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { useEffect, useRef, useState } from "react";
-import Pagination from "./Pagination";
+import Pagination from "../Pagination";
 import Dropdown from "react-bootstrap/Dropdown";
 
 const DataTable = () => {
@@ -49,19 +49,16 @@ const DataTable = () => {
     setTableSpinner(true);
 
     if (link !== null) {
-      console.log(selectURLParams);
-
       const url = new URL(link);
       const page = url.searchParams.get("page");
 
       const urlWithParams = page
         ? `${link}&${selectURLParams}`
         : `${link}?${selectURLParams}`;
-      console.log(urlWithParams);
 
       const response = await fetch(urlWithParams, config);
       const responseData = await response.json();
-      console.log(responseData);
+
       setPaginatedData(responseData);
     }
 
@@ -94,7 +91,7 @@ const DataTable = () => {
     const response = await res.json();
 
     const bookData = response.data;
-    console.log(bookData);
+
     const bookObj = {
       id: bookData.id,
       title: bookData.title,
@@ -111,7 +108,6 @@ const DataTable = () => {
   };
 
   const handleAddEditDetails = async (id) => {
-    console.log(bookDetails);
     let baseUrl = "http://localhost:8000/api/v1/admin/book";
     let url = "";
     let method = "";

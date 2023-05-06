@@ -68,9 +68,6 @@ const AdminLogin = () => {
         Cookies.set("user", data.name, { expires: 7 });
 
         navigate("/admin/books");
-      } else if (res.status == 401) {
-        // handle failed login
-        alert(data.error);
       } else {
         alert(data.error);
       }
