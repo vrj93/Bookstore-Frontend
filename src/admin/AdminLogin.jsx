@@ -34,9 +34,9 @@ const AdminLogin = () => {
   const handlePassword = (e) => {
     const passwordString = e.target.value;
 
-    if (passwordString.length > 0 && passwordString.length < 3) {
+    if (passwordString.length > 0 && passwordString.length < 5) {
       setPasswordError("");
-    } else if (passwordString.length >= 3) {
+    } else if (passwordString.length >= 5) {
       setPasswordError("d-none");
       setPassword(passwordString);
     } else {

@@ -313,7 +313,15 @@ const DataTable = () => {
 
                     <button
                       className="btn btn-danger"
-                      onClick={() => handleDeleteBook(book.id)}
+                      onClick={() => {
+                        if (
+                          window.confirm(
+                            "Are you sure you want to delete this book?"
+                          )
+                        ) {
+                          handleDeleteBook(book.id);
+                        }
+                      }}
                     >
                       Delete
                     </button>
@@ -466,6 +474,7 @@ const DataTable = () => {
                       name="published"
                       value={bookDetails.published}
                       placeholder=""
+                      max={new Date().toISOString().slice(0, 10)}
                       onChange={(e) =>
                         setBookDetails({
                           ...bookDetails,
