@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -10,34 +9,33 @@ const BookDetails = () => {
   const config = {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${Cookies.get("auth_token")}`,
     },
   };
 
-  const handleShowBookDetails = async (id) => {
-    setSpinning(true);
-    const url = `http://localhost:8000/api/v1/book/${id}`;
+  useEffect(() => {
+    const handleShowBookDetails = async (id) => {
+      setSpinning(true);
+      const url = `http://localhost:8000/api/v1/book/${id}`;
 
-    const res = await fetch(url, config);
-    const response = await res.json();
+      const res = await fetch(url, config);
+      const response = await res.json();
 
-    const bookData = response.data;
+      const bookData = response.data;
 
-    const bookObj = {
-      title: bookData.title,
-      author: bookData.author.name,
-      genre: bookData.genre.name,
-      description: bookData.description,
-      isbn: bookData.isbn,
-      published: bookData.published,
-      publisher: bookData.publisher.name,
+      const bookObj = {
+        title: bookData.title,
+        author: bookData.author.name,
+        genre: bookData.genre.name,
+        description: bookData.description,
+        isbn: bookData.isbn,
+        published: bookData.published,
+        publisher: bookData.publisher.name,
+      };
+
+      setBookDetails(bookObj);
+      setSpinning(false);
     };
 
-    setBookDetails(bookObj);
-    setSpinning(false);
-  };
-
-  useEffect(() => {
     handleShowBookDetails(id);
   }, []);
 

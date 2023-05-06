@@ -57,7 +57,7 @@ const DataTable = () => {
     setTableSpinner(false);
   };
 
-  const handleShowBookDetails = async (id) => {
+  const handleShowBook = async (id) => {
     navigate(`book/${id}`);
   };
 
@@ -186,7 +186,7 @@ const DataTable = () => {
                         cursor: "pointer",
                         fontFamily: "'Inter', sans-serif",
                       }}
-                      onClick={() => handleShowBookDetails(book.id)}
+                      onClick={() => handleShowBook(book.id)}
                     >
                       {book.title}
                     </button>
