@@ -41,7 +41,6 @@ const DataTable = () => {
 
   const config = {
     headers: {
-      Accept: "application/json",
       "Content-Type": "application/json",
       Authorization: `Bearer ${Cookies.get("auth_token")}`,
     },
@@ -87,7 +86,7 @@ const DataTable = () => {
     setAddEditButton("Update");
     setModalSpinner(true);
 
-    const url = `http://localhost:8000/api/v1/book/${id}`;
+    const url = `${import.meta.env.VITE_APP_API_URL}/book/${id}`;
 
     const res = await fetch(url, config);
     const response = await res.json();
@@ -111,7 +110,7 @@ const DataTable = () => {
 
   const handleAddEditDetails = async (id) => {
     setSubmitting(true);
-    let baseUrl = "http://localhost:8000/api/v1/admin/book";
+    let baseUrl = `${import.meta.env.VITE_APP_API_URL}/admin/book`;
     let url = "";
     let method = "";
 
@@ -135,7 +134,7 @@ const DataTable = () => {
 
       if (res.ok) {
         closeButtonRef.current.click();
-        await fetchBooks("http://localhost:8000/api/v1/book");
+        await fetchBooks(`${import.meta.env.VITE_APP_API_URL}/book`);
         alert(data.message);
       } else {
         alert(data.error);
@@ -149,7 +148,7 @@ const DataTable = () => {
 
   const handleDeleteBook = async (id) => {
     setTableSpinner(true);
-    const url = `http://localhost:8000/api/v1/admin/book/${id}`;
+    const url = `${import.meta.env.VITE_APP_API_URL}/admin/book/${id}`;
 
     try {
       const res = await fetch(url, {
@@ -161,7 +160,7 @@ const DataTable = () => {
       const response = await res.json();
 
       if (res.ok) {
-        await fetchBooks("http://localhost:8000/api/v1/book");
+        await fetchBooks(`${import.meta.env.VITE_APP_API_URL}/book`);
         alert(response.message);
       } else {
         alert(response.error);
@@ -209,7 +208,11 @@ const DataTable = () => {
     const searchString = "title=&paginate=Per Page&sortname=&sortorder=asc";
 
     if (selectURLParams != searchString && selectURLParams != "") {
-      fetchBooks("http://localhost:8000/api/v1/book");
+      const getData = setTimeout(() => {
+        fetchBooks(`${import.meta.env.VITE_APP_API_URL}/book`);
+      }, 500);
+
+      return () => clearTimeout(getData);
     }
   }, [selectURLParams]);
 

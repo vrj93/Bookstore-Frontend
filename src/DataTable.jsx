@@ -97,7 +97,11 @@ const DataTable = () => {
     const searchString = "title=&paginate=Per Page&sortname=&sortorder=asc";
 
     if (selectURLParams != searchString && selectURLParams != "") {
-      fetchBooks("http://localhost:8000/api/v1/book");
+      const getData = setTimeout(() => {
+        fetchBooks(`${import.meta.env.VITE_APP_API_URL}/book`);
+      }, 500);
+
+      return () => clearTimeout(getData);
     }
   }, [selectURLParams]);
 

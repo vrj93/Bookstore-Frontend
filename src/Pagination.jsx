@@ -44,7 +44,7 @@ export default function Pagination({
           <button
             key={i}
             onClick={() =>
-              fetchBooks(`http://localhost:8000/api/v1/book?page=${i}`)
+              fetchBooks(`${import.meta.env.VITE_APP_API_URL}/book?page=${i}`)
             }
             className="btn btn-secondary mr-2"
           >
@@ -56,7 +56,7 @@ export default function Pagination({
           <button
             key={i}
             onClick={() =>
-              fetchBooks(`http://localhost:8000/api/v1/book?page=${i}`)
+              fetchBooks(`${import.meta.env.VITE_APP_API_URL}/book?page=${i}`)
             }
             className="btn btn-outline-secondary mr-2"
           >
