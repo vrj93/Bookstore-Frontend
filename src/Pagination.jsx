@@ -8,20 +8,62 @@ export default function Pagination({
 }) {
   const renderPaginationButtons = () => {
     let paginationNumbers = [];
-    let head = 1;
-    let tail = meta.current_page + 1;
+    let head;
+    let tail;
 
-    if (meta.current_page > 2) {
-        head = meta.current_page - 1;
+    if (meta.last_page == 1) {
+      head = tail = 1;
+    }
+
+    if (meta.last_page == 2) {
+      head = 1;
+      tail = 2;
+    }
+
+    if (meta.last_page >= 3) {
+      if (meta.current_page == 1) {
+        head = 1;
+        tail = meta.current_page + 2;
+      } else if (meta.current_page == 2) {
+        head = 1;
         tail = meta.current_page + 1;
+      } else {
+        if (meta.current_page == meta.last_page) {
+          head = meta.current_page - 2;
+          tail = meta.current_page;
+        } else {
+          head = meta.current_page - 1;
+          tail = meta.current_page + 1;
+        }
+      }
     }
 
     for (let i = head; i <= tail; i++) {
-      paginationNumbers.push(
-        <button key={i} onClick={() => fetchBooks(`http://localhost:8000/api/v1/book?page=${i}`)} className="btn btn-outline-secondary mr-2">
-          {i}
-        </button>
-      );
+      if (meta.current_page == i) {
+        paginationNumbers.push(
+          <button
+            key={i}
+            onClick={() =>
+              fetchBooks(`http://localhost:8000/api/v1/book?page=${i}`)
+            }
+            className="btn btn-secondary mr-2"
+          >
+            {i}
+          </button>
+        );
+      } else {
+        paginationNumbers.push(
+          <button
+            key={i}
+            onClick={() =>
+              fetchBooks(`http://localhost:8000/api/v1/book?page=${i}`)
+            }
+            className="btn btn-outline-secondary mr-2"
+          >
+            {i}
+          </button>
+        );
+      }
     }
     return paginationNumbers;
   };
