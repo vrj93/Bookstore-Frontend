@@ -6,6 +6,7 @@ import AdminLogin from "./admin/AdminLogin";
 import AdminBook from "./admin/AdminBook";
 import Cookies from "js-cookie";
 import BookDetails from "./BookDetails";
+import Multiselect from 'multiselect-react-dropdown';
 
 function App() {
   const AdminPrivate = ({ Component }) => {
@@ -26,7 +27,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Book />} />
+          <Route path="/" element={<Book Multiselect={Multiselect} />} />
           <Route path="/book/:id" element={<BookDetails />} />
           <Route
             path="/admin"

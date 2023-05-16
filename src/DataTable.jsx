@@ -3,11 +3,11 @@ import Pagination from "./Pagination";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate } from "react-router-dom";
 
-const DataTable = () => {
+const DataTable = ({ Multiselect }) => {
   const [books, setBooks] = useState([]);
   const [links, setLinks] = useState([]);
   const [meta, setMeta] = useState([]);
-  const [selectedOption, setSelectedOption] = useState("Title");
+  const [selectedOption, setSelectedOption] = useState({});
   const [selectPerPage, setSelectPerPage] = useState("Per Page");
   const [selectURLParams, setURLParams] = useState("");
   const [selectSearchText, setSearchText] = useState("");
@@ -33,36 +33,33 @@ const DataTable = () => {
     });
   };
 
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-
   const fetchBooks = async (link) => {
     setTableSpinner(true);
 
     if (link !== null) {
-      const url = new URL(link);
-      const page = url.searchParams.get("page");
+      const response = await fetch(link, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          search_text: selectSearchText,
+          order_name: selectOrderName,
+          order_type: selectOrderType,
+          search_option: selectedOption,
+          per_page: selectPerPage,
+        }),
+      });
 
-      const urlWithParams = page
-        ? `${link}&${selectURLParams}`
-        : `${link}?${selectURLParams}`;
-
-      const response = await fetch(urlWithParams, config);
       const responseData = await response.json();
       setPaginatedData(responseData);
     }
+
     setTableSpinner(false);
   };
 
   const handleShowBook = async (id) => {
     navigate(`book/${id}`);
-  };
-
-  const handleSelect = (eventKey) => {
-    setSelectedOption(eventKey);
   };
 
   const handlePerPage = (eventKey) => {
@@ -80,6 +77,22 @@ const DataTable = () => {
   };
 
   useEffect(() => {
+    if (selectSearchText != "") {
+      const getData = setTimeout(() => {
+        fetchBooks(`${import.meta.env.VITE_APP_API_URL}/book`);
+      }, 500);
+
+      return () => clearTimeout(getData);
+    }
+  }, [
+    selectSearchText,
+    selectOrderName,
+    selectOrderType,
+    selectedOption,
+    selectPerPage,
+  ]);
+
+  /* useEffect(() => {
     if (selectSearchText !== "") {
       const newURLParam = `${selectedOption.toLowerCase()}=${selectSearchText}&paginate=${selectPerPage}&sortname=${selectOrderName}&sortorder=${selectOrderType}`;
 
@@ -103,7 +116,7 @@ const DataTable = () => {
 
       return () => clearTimeout(getData);
     }
-  }, [selectURLParams]);
+  }, [selectURLParams]); */
 
   const previousPage = async () => {
     await fetchBooks(links.prev);
@@ -121,49 +134,71 @@ const DataTable = () => {
     await fetchBooks(links.last);
   };
 
+  const options = [
+    { label: "Title", value: "title" },
+    { label: "Author", value: "author" },
+    { label: "Genre", value: "genre" },
+    { label: "ISBN", value: "isbn" },
+    { label: "Published", value: "published" },
+    { label: "Publisher", value: "publisher" },
+  ];
+
+  const handleDropDown = (selectedObj) => {
+    const optionObj = selectedObj.map((option) => {
+      return option.value;
+    });
+
+    setSelectedOption(optionObj);
+  };
+
   return (
     <div className="container-fluid">
-      <div className="row">
-        <div className="col-md-6 offset-md-6 d-flex justify-content-end mb-3">
-          <div className="input-group mr-3">
+      {/* <div className="row">
+        <div className="col-md-6 d-flex justify-content-end mb-3 w-100">
+          <div className="input-group mr-3" style={{ marginRight: 15 }}>
             <input
               type="text"
               className="form-control"
               placeholder="Search"
               aria-label="Search"
               onChange={handleSearchText}
-              style={{ marginRight: "15px" }}
             />
           </div>
-          <Dropdown onSelect={handleSelect} style={{ marginRight: "15px" }}>
-            <Dropdown.Toggle variant="warning" id="dropdown-filter">
-              {selectedOption}
-            </Dropdown.Toggle>
 
-            <Dropdown.Menu>
-              <Dropdown.Item eventKey="Title">Title</Dropdown.Item>
-              <Dropdown.Item eventKey="Author">Author</Dropdown.Item>
-              <Dropdown.Item eventKey="Genre">Genre</Dropdown.Item>
-              <Dropdown.Item eventKey="ISBN">ISBN</Dropdown.Item>
-              <Dropdown.Item eventKey="Published">Published</Dropdown.Item>
-              <Dropdown.Item eventKey="Publisher">Publisher</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <div className="input-group mr-3" style={{ marginRight: 15 }}>
+            <Multiselect
+              isObject={true}
+              onKeyPressFn={function noRefCheck() {}}
+              onRemove={function noRefCheck(selectedList) {
+                handleDropDown(selectedList);
+              }}
+              onSearch={function noRefCheck() {}}
+              onSelect={function noRefCheck(selectedList) {
+                handleDropDown(selectedList);
+              }}
+              options={options}
+              displayValue="label"
+              placeholder="Filter By"
+            />
+          </div>
 
-          <Dropdown onSelect={handlePerPage}>
-            <Dropdown.Toggle variant="info" id="dropdown-perpage">
-              {selectPerPage}
-            </Dropdown.Toggle>
+          <div className="input-group">
+            <Dropdown onSelect={handlePerPage}>
+              <Dropdown.Toggle variant="info" id="dropdown-perpage">
+                {selectPerPage}
+              </Dropdown.Toggle>
 
-            <Dropdown.Menu>
-              <Dropdown.Item eventKey="10">10</Dropdown.Item>
-              <Dropdown.Item eventKey="30">30</Dropdown.Item>
-              <Dropdown.Item eventKey="50">50</Dropdown.Item>
-              <Dropdown.Item eventKey="100">100</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+              <Dropdown.Menu>
+                <Dropdown.Item eventKey="10">10</Dropdown.Item>
+                <Dropdown.Item eventKey="30">30</Dropdown.Item>
+                <Dropdown.Item eventKey="50">50</Dropdown.Item>
+                <Dropdown.Item eventKey="100">100</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
         </div>
-      </div>
+      </div> */}
+
       <div className="table-responsive">
         <table className="table table-bordered table-hover">
           <thead className="thead-dark">
@@ -174,7 +209,7 @@ const DataTable = () => {
                 onClick={() => handleOrder("title")}
                 style={{ cursor: "pointer" }}
               >
-                Title
+                Titles
               </th>
             </tr>
           </thead>
