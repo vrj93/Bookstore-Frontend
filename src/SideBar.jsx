@@ -14,6 +14,7 @@ const SideBar = () => {
     year: "",
   });
   const [year, setYear] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const KeyCodes = {
     comma: 188,
@@ -127,127 +128,63 @@ const SideBar = () => {
     setPublisher(newPublisher);
   };
 
+  //Year Dropdown
+  const generateYearOptions = () => {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+
+    for (let year = 2000; year <= currentYear; year++) {
+      years.push(year);
+    }
+
+    return years;
+  };
+
+  const yearOptions = generateYearOptions();
+
   //Published
   const handlePublished = (eventKey) => {
-    switch (eventKey) {
-      case "Before":
-        setPublished({
-          ...published,
-          duration: "before",
-        });
-        break;
-      case "After":
-        setPublished({
-          ...published,
-          duration: "after",
-        });
-        break;
-      case "January":
-        setPublished({
-          ...published,
-          year: "1",
-        });
-        setYear("January");
-        break;
-      case "February":
-        setPublished({
-          ...published,
-          year: "2",
-        });
-        setYear("February");
-        break;
-      case "March":
-        setPublished({
-          ...published,
-          year: "3",
-        });
-        setYear("March");
-        break;
-      case "April":
-        setPublished({
-          ...published,
-          year: "4",
-        });
-        setYear("April");
-        break;
-      case "May":
-        setPublished({
-          ...published,
-          year: "5",
-        });
-        setYear("May");
-        break;
-      case "June":
-        setPublished({
-          ...published,
-          year: "6",
-        });
-        setYear("June");
-        break;
-      case "July":
-        setPublished({
-          ...published,
-          year: "7",
-        });
-        setYear("July");
-        break;
-      case "August":
-        setPublished({
-          ...published,
-          year: "8",
-        });
-        setYear("August");
-        break;
-      case "September":
-        setPublished({
-          ...published,
-          year: "after",
-        });
-
-        setYear("September");
-        break;
-      case "October":
-        setPublished({
-          ...published,
-          year: "10",
-        });
-        setYear("October");
-        break;
-      case "November":
-        setPublished({
-          ...published,
-          year: "11",
-        });
-        setYear("November");
-        break;
-      case "December":
-        setPublished({
-          ...published,
-          year: "12",
-        });
-        setYear("December");
-        break;
-      default:
-        break;
+    if (eventKey === "Before") {
+      setPublished({
+        ...published,
+        duration: "before",
+      });
+    } else if (eventKey === "After") {
+      setPublished({
+        ...published,
+        duration: "after",
+      });
+    } else {
+      setPublished({
+        ...published,
+        year: eventKey,
+      });
     }
   };
 
-  console.log(published);
+  // console.log(published);
 
-  /* const handleTitle = (title) => {
-    if (title.endsWith(" ")) {
-      const word = title.trim().split(" ").join("");
-      let searchTitleObj = [...searchTitle, { label: word, value: word }];
+  const handleSearch = () => {
+    setSubmitting(true);
 
-      const inputElement = document.querySelector("#search_title input");
-      inputElement.value = "";
-      inputElement.blur();
+    let searchObj = {
+      title: titles,
+      content: content,
+      author: authors,
+      genre: genres,
+      publisher: publishers,
+      isbn: isbn,
+      published: published,
+    };
 
-      setSearchTitle(searchTitleObj);
-    }
+    console.log(searchObj);
+
+    const getTimer = setTimeout(() => {
+      setSubmitting(false);
+    }, 3000);
+
+    return () => clearTimeout(getTimer);
   };
-
-  console.log(searchTitle); */
 
   return (
     <>
@@ -268,13 +205,6 @@ const SideBar = () => {
                 autocomplete
                 editable
               />
-              {/* <Select
-                  id="search_title"
-                  isMulti={true}
-                  onInputChange={handleTitle}
-                  value={searchTitle}
-                  placeholder="Search title"
-                /> */}
             </li>
             <li>
               <label>Content</label>
@@ -340,7 +270,7 @@ const SideBar = () => {
             <li>
               <label>Published</label>
               <Dropdown onSelect={handlePublished}>
-                <Dropdown.Toggle variant="" id="">
+                <Dropdown.Toggle variant="primary" id="">
                   {published.duration}
                 </Dropdown.Toggle>
 
@@ -349,39 +279,32 @@ const SideBar = () => {
                   <Dropdown.Item eventKey="After">After</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
+
               <Dropdown onSelect={handlePublished}>
-                <Dropdown.Toggle variant="" id="">
-                  {year}
+                <Dropdown.Toggle variant="primary" id="year-dropdown">
+                  {published.year}
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <Dropdown.Item eventKey="January">January</Dropdown.Item>
-                  <Dropdown.Item eventKey="February">February</Dropdown.Item>
-                  <Dropdown.Item eventKey="March">March</Dropdown.Item>
-                  <Dropdown.Item eventKey="April">April</Dropdown.Item>
-                  <Dropdown.Item eventKey="May">May</Dropdown.Item>
-                  <Dropdown.Item eventKey="June">June</Dropdown.Item>
-                  <Dropdown.Item eventKey="July">July</Dropdown.Item>
-                  <Dropdown.Item eventKey="August">August</Dropdown.Item>
-                  <Dropdown.Item eventKey="September">September</Dropdown.Item>
-                  <Dropdown.Item eventKey="October">October</Dropdown.Item>
-                  <Dropdown.Item eventKey="November">November</Dropdown.Item>
-                  <Dropdown.Item eventKey="December">December</Dropdown.Item>
+                  {yearOptions.map((year) => (
+                    <Dropdown.Item key={year} eventKey={year}>
+                      {year}
+                    </Dropdown.Item>
+                  ))}
                 </Dropdown.Menu>
               </Dropdown>
             </li>
-
           </ul>
 
           <div className="mb-5">
-          <button
-                type="button"
-                className="btn btn-primary"
-                // disabled={submitting}
-                // onClick={() => handleAddEditDetails(bookDetails.id)}
-              >
-                Search
-              </button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              disabled={submitting}
+              onClick={handleSearch}
+            >
+              Search
+            </button>
           </div>
         </div>
       </nav>
