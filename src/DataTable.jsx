@@ -3,7 +3,7 @@ import Pagination from "./Pagination";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate } from "react-router-dom";
 
-const DataTable = ({ Multiselect }) => {
+const DataTable = ({ }) => {
   const [books, setBooks] = useState([]);
   const [links, setLinks] = useState([]);
   const [meta, setMeta] = useState([]);

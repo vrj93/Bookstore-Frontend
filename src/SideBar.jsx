@@ -164,8 +164,10 @@ const SideBar = () => {
 
   // console.log(published);
 
-  const handleSearch = () => {
-    setSubmitting(true);
+  const handleSearch = async (e) => {
+    e.preventDefault();
+
+    // setSubmitting(true);
 
     let searchObj = {
       title: titles,
@@ -178,135 +180,142 @@ const SideBar = () => {
     };
 
     console.log(searchObj);
+    const searchJson = JSON.stringify(searchObj);
+    
+    const res = await fetch(`${import.meta.env.VITE_APP_API_URL}/book?search=${searchJson}`);
 
-    const getTimer = setTimeout(() => {
-      setSubmitting(false);
-    }, 3000);
+    const response = await res.json(res);
+    console.log(response);
 
-    return () => clearTimeout(getTimer);
+    // const getTimer = setTimeout(() => {
+      // setSubmitting(false);
+    // }, 3000);
+
+    // return () => clearTimeout(getTimer);
   };
 
   return (
     <>
       <nav id="sidebar" className="">
-        <div className="px-2 pt-3">
-          <h3>Search Books</h3>
-          <ul className="components mb-5">
-            <li>
-              <label>Title</label>
-              <ReactTags
-                tags={titles}
-                delimiters={delimiters}
-                handleDelete={handleDeleteTitle}
-                handleAddition={handleAdditionTitle}
-                handleDrag={handleDragTitle}
-                handleTagClick={handleTagClick}
-                inputFieldPosition="inline"
-                autocomplete
-                editable
-              />
-            </li>
-            <li>
-              <label>Content</label>
-              <ReactTags
-                tags={content}
-                delimiters={delimiters}
-                handleDelete={handleDeleteContent}
-                handleAddition={handleAdditionContent}
-                handleDrag={handleDragContent}
-                handleTagClick={handleTagClick}
-                inputFieldPosition="inline"
-                autocomplete
-                editable
-              />
-            </li>
-            <li>
-              <label>Author</label>
-              <ReactTags
-                tags={authors}
-                delimiters={delimiters}
-                handleDelete={handleDeleteAuthor}
-                handleAddition={handleAdditionAuthor}
-                handleDrag={handleDragAuthor}
-                handleTagClick={handleTagClick}
-                inputFieldPosition="inline"
-                autocomplete
-                editable
-              />
-            </li>
-            <li>
-              <label>Genre</label>
-              <ReactTags
-                tags={genres}
-                delimiters={delimiters}
-                handleDelete={handleDeleteGenre}
-                handleAddition={handleAdditionGenre}
-                handleDrag={handleDragGenre}
-                handleTagClick={handleTagClick}
-                inputFieldPosition="inline"
-                autocomplete
-                editable
-              />
-            </li>
-            <li>
-              <label>Publisher</label>
-              <ReactTags
-                tags={publishers}
-                delimiters={delimiters}
-                handleDelete={handleDeletePublisher}
-                handleAddition={handleAdditionPublisher}
-                handleDrag={handleDragPublisher}
-                handleTagClick={handleTagClick}
-                inputFieldPosition="inline"
-                autocomplete
-                editable
-              />
-            </li>
-            <li>
-              <label>ISBN</label>
-              <input type="test" onChange={(e) => setISBN(e.target.value)} />
-            </li>
+        <form action="" onSubmit={handleSearch}>
+          <div className="px-2 pt-3">
+            <h3>Search Books</h3>
+            <ul className="components mb-5">
+              <li>
+                <label>Title</label>
+                <ReactTags
+                  tags={titles}
+                  delimiters={delimiters}
+                  handleDelete={handleDeleteTitle}
+                  handleAddition={handleAdditionTitle}
+                  handleDrag={handleDragTitle}
+                  handleTagClick={handleTagClick}
+                  inputFieldPosition="inline"
+                  autocomplete
+                  editable
+                />
+              </li>
+              <li>
+                <label>Content</label>
+                <ReactTags
+                  tags={content}
+                  delimiters={delimiters}
+                  handleDelete={handleDeleteContent}
+                  handleAddition={handleAdditionContent}
+                  handleDrag={handleDragContent}
+                  handleTagClick={handleTagClick}
+                  inputFieldPosition="inline"
+                  autocomplete
+                  editable
+                />
+              </li>
+              <li>
+                <label>Author</label>
+                <ReactTags
+                  tags={authors}
+                  delimiters={delimiters}
+                  handleDelete={handleDeleteAuthor}
+                  handleAddition={handleAdditionAuthor}
+                  handleDrag={handleDragAuthor}
+                  handleTagClick={handleTagClick}
+                  inputFieldPosition="inline"
+                  autocomplete
+                  editable
+                />
+              </li>
+              <li>
+                <label>Genre</label>
+                <ReactTags
+                  tags={genres}
+                  delimiters={delimiters}
+                  handleDelete={handleDeleteGenre}
+                  handleAddition={handleAdditionGenre}
+                  handleDrag={handleDragGenre}
+                  handleTagClick={handleTagClick}
+                  inputFieldPosition="inline"
+                  autocomplete
+                  editable
+                />
+              </li>
+              <li>
+                <label>Publisher</label>
+                <ReactTags
+                  tags={publishers}
+                  delimiters={delimiters}
+                  handleDelete={handleDeletePublisher}
+                  handleAddition={handleAdditionPublisher}
+                  handleDrag={handleDragPublisher}
+                  handleTagClick={handleTagClick}
+                  inputFieldPosition="inline"
+                  autocomplete
+                  editable
+                />
+              </li>
+              <li>
+                <label>ISBN</label>
+                <input type="test" onChange={(e) => setISBN(e.target.value)} />
+              </li>
 
-            <li>
-              <label>Published</label>
-              <Dropdown onSelect={handlePublished}>
-                <Dropdown.Toggle variant="primary" id="">
-                  {published.duration}
-                </Dropdown.Toggle>
+              <li>
+                <label>Published</label>
+                <Dropdown onSelect={handlePublished}>
+                  <Dropdown.Toggle variant="primary" id="">
+                    {published.duration}
+                  </Dropdown.Toggle>
 
-                <Dropdown.Menu>
-                  <Dropdown.Item eventKey="Before">Before</Dropdown.Item>
-                  <Dropdown.Item eventKey="After">After</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+                  <Dropdown.Menu>
+                    <Dropdown.Item eventKey="Before">Before</Dropdown.Item>
+                    <Dropdown.Item eventKey="After">After</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
 
-              <Dropdown onSelect={handlePublished}>
-                <Dropdown.Toggle variant="primary" id="year-dropdown">
-                  {published.year}
-                </Dropdown.Toggle>
+                <Dropdown onSelect={handlePublished}>
+                  <Dropdown.Toggle variant="primary" id="year-dropdown">
+                    {published.year}
+                  </Dropdown.Toggle>
 
-                <Dropdown.Menu>
-                  {yearOptions.map((year) => (
-                    <Dropdown.Item key={year} eventKey={year}>
-                      {year}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
-            </li>
-          </ul>
+                  <Dropdown.Menu>
+                    {yearOptions.map((year) => (
+                      <Dropdown.Item key={year} eventKey={year}>
+                        {year}
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </li>
+            </ul>
 
-          <div className="mb-5">
-            <button
-              type="button"
-              className="btn btn-primary"
-              disabled={submitting}
-              onClick={handleSearch}
-            >
-              Search
-            </button>
+            <div className="mb-5">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={submitting}
+              >
+                Search
+              </button>
+            </div>
           </div>
-        </div>
+        </form>
       </nav>
     </>
   );

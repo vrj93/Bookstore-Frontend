@@ -1,11 +1,11 @@
 import DataTable from "./DataTable";
 import SideBar from "./SideBar";
 
-const Book = ({ Multiselect }) => {
+const Book = ({ }) => {
   return (
     <>
       <div className="d-flex align-items-stretch vh-100">
-        <SideBar Multiselect={Multiselect} />
+        <SideBar />
 
         {/* <!-- Data Table  --> */}
         <div id="content" className="container-fluid">
@@ -15,7 +15,7 @@ const Book = ({ Multiselect }) => {
             <h2 className="rounded p-2" style={{ color: "black" }}>Results</h2>
           </div>
 
-          <DataTable Multiselect={Multiselect} />
+          <DataTable />
         </div>
       </div>
     </>
