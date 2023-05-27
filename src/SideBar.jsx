@@ -1,5 +1,6 @@
 import { WithContext as ReactTags } from "react-tag-input";
 import Dropdown from "react-bootstrap/Dropdown";
+import './css/style.css';
 
 const SideBar = ({
   titles,

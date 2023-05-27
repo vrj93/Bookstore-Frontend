@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("d-none");
-  const [passwordError, setPasswordError] = useState("d-none");
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const navigate = useNavigate();
 
   const handleEmail = (e) => {
@@ -21,13 +22,14 @@ const AdminLogin = () => {
       const isValid = isValidEmail(emailString);
 
       if (isValid) {
-        setEmailError("d-none");
+        setEmailError(false);
         setEmail(emailString);
       } else {
-        setEmailError("");
+        setEmailError(true);
       }
     } else {
-      setEmailError("d-none");
+      setEmailError(false);
+      setEmail("");
     }
   };
 
@@ -35,30 +37,48 @@ const AdminLogin = () => {
     const passwordString = e.target.value;
 
     if (passwordString.length > 0 && passwordString.length < 5) {
-      setPasswordError("");
+      setPasswordError(true);
     } else if (passwordString.length >= 5) {
-      setPasswordError("d-none");
+      setPasswordError(false);
       setPassword(passwordString);
     } else {
-      setPasswordError("d-none");
+      setPasswordError(false);
+      setPassword("");
     }
   };
+
+  useEffect(() => {
+    email == "" || password == ""
+      ? setIsSubmitDisabled(true)
+      : setIsSubmitDisabled(false);
+  }, [email, password]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    if (emailError || passwordError) {
+      return;
+    }
+
+    const csrfToken = document
+      .querySelector('meta[name="csrf-token"]')
+      .getAttribute("content");
+
     try {
-      const res = await fetch("http://localhost:8000/api/v1/admin/login", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_APP_API_URL}/admin/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": csrfToken,
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        }
+      );
 
       const data = await res.json();
 
@@ -79,7 +99,9 @@ const AdminLogin = () => {
   return (
     <>
       <div className="container">
-        <h2 className="m-5">Admin Login</h2>
+        <h2 className="m-5" style={{ color: "black" }}>
+          Admin Login
+        </h2>
         <center>
           <div className="" style={{ maxWidth: 400 }}>
             <form action="" onSubmit={handleLogin}>
@@ -92,11 +114,11 @@ const AdminLogin = () => {
                   placeholder="Email address"
                   onChange={handleEmail}
                 />
-                <p
-                  className={`form-control text-white bg-danger ${emailError}`}
-                >
-                  Enter valid Email
-                </p>
+                {emailError && (
+                  <p className="form-control text-white bg-danger">
+                    Enter valid Email
+                  </p>
+                )}
               </div>
               <div className="mb-3">
                 <input
@@ -107,13 +129,17 @@ const AdminLogin = () => {
                   placeholder="Password"
                   onChange={handlePassword}
                 />
-                <p
-                  className={`form-control text-white bg-danger ${passwordError}`}
-                >
-                  Password should be minimun 5 characters
-                </p>
+                {passwordError && (
+                  <p className="form-control text-white bg-danger">
+                    Password should be minimun 5 characters
+                  </p>
+                )}
               </div>
-              <button type="submit" className="btn btn-primary mt-3">
+              <button
+                type="submit"
+                className="btn btn-primary mt-3"
+                disabled={isSubmitDisabled}
+              >
                 Submit
               </button>
             </form>
