@@ -1,21 +1,23 @@
-import { useState } from "react";
 import { WithContext as ReactTags } from "react-tag-input";
 import Dropdown from "react-bootstrap/Dropdown";
 
-const SideBar = () => {
-  const [titles, setTitles] = useState([]);
-  const [content, setContent] = useState([]);
-  const [authors, setAuthor] = useState([]);
-  const [genres, setGenre] = useState([]);
-  const [publishers, setPublisher] = useState([]);
-  const [isbn, setISBN] = useState([]);
-  const [published, setPublished] = useState({
-    duration: "",
-    year: "",
-  });
-  const [year, setYear] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-
+const SideBar = ({
+  titles,
+  setTitles,
+  content,
+  setContent,
+  authors,
+  setAuthor,
+  genres,
+  setGenre,
+  publishers,
+  setPublisher,
+  setISBN,
+  published,
+  setPublished,
+  submitting,
+  handleSearch,
+}) => {
   const KeyCodes = {
     comma: 188,
     enter: 13,
@@ -46,8 +48,6 @@ const SideBar = () => {
     setTitles(newTags);
   };
 
-  // console.log(titles);
-
   //Content
   const handleDeleteContent = (i) => {
     console.log(i);
@@ -67,8 +67,6 @@ const SideBar = () => {
     setContent(newContent);
   };
 
-  // console.log(content);
-
   //Author
   const handleDeleteAuthor = (i) => {
     console.log(i);
@@ -87,8 +85,6 @@ const SideBar = () => {
 
     setAuthor(newAuthor);
   };
-
-  // console.log(authors);
 
   //Genre
   const handleDeleteGenre = (i) => {
@@ -160,38 +156,6 @@ const SideBar = () => {
         year: eventKey,
       });
     }
-  };
-
-  // console.log(published);
-
-  const handleSearch = async (e) => {
-    e.preventDefault();
-
-    // setSubmitting(true);
-
-    let searchObj = {
-      title: titles,
-      content: content,
-      author: authors,
-      genre: genres,
-      publisher: publishers,
-      isbn: isbn,
-      published: published,
-    };
-
-    console.log(searchObj);
-    const searchJson = JSON.stringify(searchObj);
-    
-    const res = await fetch(`${import.meta.env.VITE_APP_API_URL}/book?search=${searchJson}`);
-
-    const response = await res.json(res);
-    console.log(response);
-
-    // const getTimer = setTimeout(() => {
-      // setSubmitting(false);
-    // }, 3000);
-
-    // return () => clearTimeout(getTimer);
   };
 
   return (
@@ -273,7 +237,7 @@ const SideBar = () => {
               </li>
               <li>
                 <label>ISBN</label>
-                <input type="test" onChange={(e) => setISBN(e.target.value)} />
+                <input type="text" onChange={(e) => setISBN(e.target.value)} />
               </li>
 
               <li>

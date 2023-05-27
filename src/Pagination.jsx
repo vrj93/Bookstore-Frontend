@@ -1,6 +1,6 @@
 export default function Pagination({
   meta,
-  fetchBooks,
+  handleSearch,
   firstPage,
   previousPage,
   nextPage,
@@ -43,9 +43,7 @@ export default function Pagination({
         paginationNumbers.push(
           <button
             key={i}
-            onClick={() =>
-              fetchBooks(`${import.meta.env.VITE_APP_API_URL}/book?page=${i}`)
-            }
+            onClick={(e) => handleSearch(e, i)}
             className="btn btn-secondary mr-2"
           >
             {i}
@@ -55,9 +53,7 @@ export default function Pagination({
         paginationNumbers.push(
           <button
             key={i}
-            onClick={() =>
-              fetchBooks(`${import.meta.env.VITE_APP_API_URL}/book?page=${i}`)
-            }
+            onClick={(e) => handleSearch(e, i)}
             className="btn btn-outline-secondary mr-2"
           >
             {i}
