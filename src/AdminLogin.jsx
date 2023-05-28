@@ -60,10 +60,6 @@ const AdminLogin = () => {
       return;
     }
 
-    const csrfToken = document
-      .querySelector('meta[name="csrf-token"]')
-      .getAttribute("content");
-
     try {
       const res = await fetch(
         `${import.meta.env.VITE_APP_API_URL}/admin/login`,
@@ -71,7 +67,6 @@ const AdminLogin = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-CSRF-TOKEN": csrfToken,
           },
           body: JSON.stringify({
             email: email,
@@ -87,7 +82,7 @@ const AdminLogin = () => {
         Cookies.set("auth_token", data.token, { expires: 7 });
         Cookies.set("user", data.name, { expires: 7 });
 
-        navigate("/admin/books");
+        navigate("/");
       } else {
         alert(data.error);
       }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import DataTable from "./DataTable";
 import SideBar from "./SideBar";
+import Cookies from "js-cookie";
 
 const Book = () => {
   //Sidebar States
@@ -132,10 +133,22 @@ const Book = () => {
 
         {/* <!-- Data Table  --> */}
         <div id="content" className="container-fluid">
-          <div className="d-flex justify-content-start align-items-center px-4 mb-3">
-            <h2 className="rounded p-2" style={{ color: "black" }}>
-              Results
-            </h2>
+          <div className="d-flex justify-content-between">
+            <div className="justify-content-start align-items-center px-4 mb-3">
+              <h2 className="rounded p-2" style={{ color: "black" }}>
+                Results
+              </h2>
+            </div>
+            {Cookies.get("user") && (
+              <div className="justify-content-end align-items-center px-4 my-3">
+                <span
+                  className="rounded p-2"
+                  style={{ color: "#781A75", fontSize: 18, fontFamily: "sans-serif" }}
+                >
+                  <strong>Hello {Cookies.get("user").split(" ")[0]}!</strong>
+                </span>
+              </div>
+            )}
           </div>
 
           <DataTable
