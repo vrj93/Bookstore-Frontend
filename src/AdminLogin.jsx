@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
@@ -79,8 +79,7 @@ const AdminLogin = () => {
 
       if (res.ok) {
         // handle successful login
-        Cookies.set("auth_token", data.token, { expires: 7 });
-        Cookies.set("user", data.name, { expires: 7 });
+        Cookies.set("token", data.token, { expires: 7 });
 
         navigate("/");
       } else {

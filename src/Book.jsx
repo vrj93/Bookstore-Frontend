@@ -3,7 +3,7 @@ import DataTable from "./DataTable";
 import SideBar from "./SideBar";
 import Cookies from "js-cookie";
 
-const Book = () => {
+const Book = ({ isAuthenticated }) => {
   //Sidebar States
   const [titles, setTitles] = useState([]);
   const [content, setContent] = useState([]);
@@ -139,7 +139,7 @@ const Book = () => {
                 Results
               </h2>
             </div>
-            {Cookies.get("user") && (
+            {isAuthenticated && (
               <div className="justify-content-end align-items-center px-4 my-3">
                 <span
                   className="rounded p-2"
