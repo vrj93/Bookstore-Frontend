@@ -1,15 +1,18 @@
 import { auto } from "@popperjs/core";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const BookDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [bookDetails, setBookDetails] = useState({});
   const [isSpinning, setSpinning] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState("dummy");
   const [selectedFile, setSelectedFile] = useState(null);
   const [imageURL, setImageURL] = useState("");
+  const [insertedBookId, setInsertedBookId] = useState(false);
+  const [createBookButton, setCreateBookButton] = useState(true);
 
   const handleAuth = async () => {
     setSpinning(true);
@@ -79,12 +82,19 @@ const BookDetails = () => {
       body: JSON.stringify(bookDetails),
     });
 
-    const response = await res.json();
-    console.log(response);
+    if (res.ok) {
+      setCreateBookButton(false);
+      const response = await res.json();
+      !id && setInsertedBookId(response.data);
+      console.log(response);
+    } else {
+      console.log("Something went wrong");
+    }
   };
 
   useEffect(() => {
     handleAuth();
+
     if (id) {
       handleShowBookDetails(id);
     } else {
@@ -101,12 +111,13 @@ const BookDetails = () => {
   };
 
   const handleImageUpload = async () => {
+    const bookId = id ? id : insertedBookId;
     const formData = new FormData();
-    formData.append("id", id);
+
     formData.append("cover", selectedFile);
 
     const res = await fetch(
-      `${import.meta.env.VITE_APP_API_URL}/admin/book/cover-upload/${id}`,
+      `${import.meta.env.VITE_APP_API_URL}/admin/book/cover-upload/${bookId}`,
       {
         method: "POST",
         headers: {
@@ -116,8 +127,11 @@ const BookDetails = () => {
       }
     );
 
-    const response = await res.json();
-    console.log(response);
+    if (res.ok) {
+      const response = await res.json();
+      alert(response.message);
+      navigate('/');
+    }
   };
 
   console.log(selectedFile);
@@ -267,13 +281,24 @@ const BookDetails = () => {
                     <tr>
                       <th scope="row"></th>
                       <td className="text-start">
-                        <button
-                          type="submit"
-                          className="btn btn-primary mt-2"
-                          style={{ width: 150 }}
-                        >
-                          {id ? "Update" : "Create"}
-                        </button>
+                        {!id && createBookButton && (
+                          <button
+                            type="submit"
+                            className="btn btn-primary mt-2"
+                            style={{ width: 150 }}
+                          >
+                            Create
+                          </button>
+                        )}
+                        {id && (
+                          <button
+                            type="submit"
+                            className="btn btn-primary mt-2"
+                            style={{ width: 150 }}
+                          >
+                            Update
+                          </button>
+                        )}
                       </td>
                     </tr>
                   </tbody>
@@ -311,13 +336,15 @@ const BookDetails = () => {
                   />
                 </div>
                 <div className="col-12">
-                  <button
-                    type="button"
-                    className="mt-2 btn btn-primary"
-                    onClick={handleImageUpload}
-                  >
-                    Upload Cover
-                  </button>
+                  {insertedBookId || id && (
+                    <button
+                      type="button"
+                      className="mt-2 btn btn-primary"
+                      onClick={handleImageUpload}
+                    >
+                      Upload Cover
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
