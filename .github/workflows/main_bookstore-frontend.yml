@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'bookstore-frontend'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_851DA231483A43C3B35926DEC05B22F9 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_395093E03793425F939AFF463A3CA655 }}
           package: .
