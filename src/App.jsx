@@ -1,12 +1,6 @@
 /* eslint-disable react/prop-types */
 import "./App.css";
-import {
-  HashRouter as Router,
-  Route,
-  Switch,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import Book from "./Book";
 import AdminLogin from "./AdminLogin";
 import Cookies from "js-cookie";
@@ -21,13 +15,13 @@ function App() {
 
   return (
     <>
-      <Router>
-        <Switch>
-          <Route path="/" exact component={Book} />
-          <Route path="/book/:id?" component={BookDetails} />
-          <Route path="/admin" component={AdminLogin} />
-        </Switch>
-      </Router>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Book />} />
+          <Route path="/book/:id?" element={<BookDetails />} />
+          <Route path="/admin" element={<AdminLogin />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }

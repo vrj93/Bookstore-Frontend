@@ -79,6 +79,7 @@ const AdminLogin = () => {
 
       if (res.ok) {
         // handle successful login
+        Cookies.set("user", data.name, { expires: 7 })
         Cookies.set("token", data.token, { expires: 7 });
 
         navigate("/");

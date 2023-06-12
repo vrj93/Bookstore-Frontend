@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import DataTable from "./DataTable";
 import SideBar from "./SideBar";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
-const Book = ({ isAuthenticated }) => {
+const Book = () => {
   //Sidebar States
   const [titles, setTitles] = useState([]);
   const [content, setContent] = useState([]);
@@ -24,6 +25,25 @@ const Book = ({ isAuthenticated }) => {
   const [selectPerPage, setSelectPerPage] = useState("Per Page");
   const [selectOrderType, setOrderTpye] = useState("asc");
   const [isTableSpinning, setTableSpinning] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
+  const handleAuth = async () => {
+    const res = await fetch(`${import.meta.env.VITE_APP_API_URL}/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Cookies.get("token")}`,
+      },
+    });
+
+    if (res.ok) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+      console.log("Unauthenticated");
+    }
+  };
 
   const handleSearch = async (e, page = null) => {
     e.type === "submit" && e.preventDefault();
@@ -85,6 +105,10 @@ const Book = ({ isAuthenticated }) => {
     }
   }, [selectPerPage]);
 
+  useEffect(() => {
+    handleAuth();
+  }, []);
+
   const setPaginatedData = (response) => {
     setBooks(response.data.data);
     setLinks({
@@ -139,14 +163,28 @@ const Book = ({ isAuthenticated }) => {
                 Results
               </h2>
             </div>
-            {isAuthenticated && (
+            {isAuthenticated ? (
               <div className="justify-content-end align-items-center px-4 my-3">
                 <span
                   className="rounded p-2"
-                  style={{ color: "#781A75", fontSize: 18, fontFamily: "sans-serif" }}
+                  style={{
+                    color: "#781A75",
+                    fontSize: 18,
+                    fontFamily: "sans-serif",
+                  }}
                 >
                   <strong>Hello {Cookies.get("user").split(" ")[0]}!</strong>
                 </span>
+              </div>
+            ) : (
+              <div className="justify-content-end align-items-center px-4 my-3">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => navigate("/admin")}
+                >
+                  Admin Login
+                </button>
               </div>
             )}
           </div>
