@@ -45,6 +45,24 @@ const Book = () => {
     }
   };
 
+  const handleLogout = async () => {
+    const res = await fetch(`${import.meta.env.VITE_APP_API_URL}/logout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Cookies.get("token")}`,
+      },
+    });
+
+    if (res.ok) {
+      setIsAuthenticated(false);
+      const response = await res.json();
+      console.log(response.msg);
+    } else {
+      console.log("Something went wrong");
+    }
+  };
+
   const handleSearch = async (e, page = null) => {
     e.type === "submit" && e.preventDefault();
     console.log("clicked", page);
@@ -166,7 +184,7 @@ const Book = () => {
             {isAuthenticated ? (
               <div className="justify-content-end align-items-center px-4 my-3">
                 <span
-                  className="rounded p-2"
+                  className="rounded p-2 mr-2"
                   style={{
                     color: "#781A75",
                     fontSize: 18,
@@ -175,6 +193,13 @@ const Book = () => {
                 >
                   <strong>Hello {Cookies.get("user").split(" ")[0]}!</strong>
                 </span>
+                <button
+                  type="button"
+                  className="btn btn-warning"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
               </div>
             ) : (
               <div className="justify-content-end align-items-center px-4 my-3">
