@@ -1,4 +1,4 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
@@ -8,6 +8,7 @@ const AdminLogin = () => {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleEmail = (e) => {
@@ -56,6 +57,8 @@ const AdminLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    setIsSubmitting(true);
+
     if (emailError || passwordError) {
       return;
     }
@@ -79,12 +82,13 @@ const AdminLogin = () => {
 
       if (res.ok) {
         // handle successful login
-        Cookies.set("user", data.name, { expires: 7 })
+        Cookies.set("user", data.name, { expires: 7 });
         Cookies.set("token", data.token, { expires: 7 });
 
         navigate("/");
       } else {
         alert(data.error);
+        setIsSubmitting(false);
       }
     } catch (err) {
       console.error(err);
@@ -93,6 +97,37 @@ const AdminLogin = () => {
 
   return (
     <>
+      {isSubmitting && (
+        <div>
+          <div
+            className="spinner-overlay"
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              "background-color": "#808080",
+              "z-index": 9999,
+            }}
+          ></div>
+          <div
+            className="spinner-container"
+            style={{
+              display: "flex",
+              "align-items": "center",
+              "justify-content": "center",
+              height: "100vh",
+              "z-index": 10000,
+            }}
+          >
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="container">
         <h2 className="m-5" style={{ color: "black" }}>
           Admin Login

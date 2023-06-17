@@ -63,6 +63,8 @@ const BookDetails = () => {
   const handleAddUpdateBook = async (e) => {
     e.preventDefault();
 
+    setSpinning(true);
+
     let url, method;
 
     if (id) {
@@ -90,6 +92,8 @@ const BookDetails = () => {
     } else {
       console.log("Something went wrong");
     }
+
+    setSpinning(false);
   };
 
   useEffect(() => {
@@ -111,6 +115,8 @@ const BookDetails = () => {
   };
 
   const handleImageUpload = async () => {
+    setSpinning(true);
+
     const bookId = id ? id : insertedBookId;
     const formData = new FormData();
 
@@ -130,8 +136,12 @@ const BookDetails = () => {
     if (res.ok) {
       const response = await res.json();
       alert(response.message);
-      navigate('/');
+      navigate("/");
+    } else {
+      console.log("Something went wrong");
     }
+    
+    setSpinning(false);
   };
 
   console.log(selectedFile);
@@ -336,15 +346,16 @@ const BookDetails = () => {
                   />
                 </div>
                 <div className="col-12">
-                  {insertedBookId || id && (
-                    <button
-                      type="button"
-                      className="mt-2 btn btn-primary"
-                      onClick={handleImageUpload}
-                    >
-                      Upload Cover
-                    </button>
-                  )}
+                  {insertedBookId ||
+                    (id && (
+                      <button
+                        type="button"
+                        className="mt-2 btn btn-primary"
+                        onClick={handleImageUpload}
+                      >
+                        Upload Cover
+                      </button>
+                    ))}
                 </div>
               </div>
             </div>
