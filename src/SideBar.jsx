@@ -1,6 +1,6 @@
 import { WithContext as ReactTags } from "react-tag-input";
 import Dropdown from "react-bootstrap/Dropdown";
-import './css/style.css';
+import "./css/style.css";
 
 const SideBar = ({
   titles,
@@ -165,115 +165,142 @@ const SideBar = ({
         <form action="" onSubmit={handleSearch}>
           <div className="px-2 pt-3">
             <h3>Search Books</h3>
-            <ul className="components mb-5">
-              <li>
-                <label>Title</label>
-                <ReactTags
-                  tags={titles}
-                  delimiters={delimiters}
-                  handleDelete={handleDeleteTitle}
-                  handleAddition={handleAdditionTitle}
-                  handleDrag={handleDragTitle}
-                  handleTagClick={handleTagClick}
-                  inputFieldPosition="inline"
-                  autocomplete
-                  editable
-                />
-              </li>
-              <li>
-                <label>Content</label>
-                <ReactTags
-                  tags={content}
-                  delimiters={delimiters}
-                  handleDelete={handleDeleteContent}
-                  handleAddition={handleAdditionContent}
-                  handleDrag={handleDragContent}
-                  handleTagClick={handleTagClick}
-                  inputFieldPosition="inline"
-                  autocomplete
-                  editable
-                />
-              </li>
-              <li>
-                <label>Author</label>
-                <ReactTags
-                  tags={authors}
-                  delimiters={delimiters}
-                  handleDelete={handleDeleteAuthor}
-                  handleAddition={handleAdditionAuthor}
-                  handleDrag={handleDragAuthor}
-                  handleTagClick={handleTagClick}
-                  inputFieldPosition="inline"
-                  autocomplete
-                  editable
-                />
-              </li>
-              <li>
-                <label>Genre</label>
-                <ReactTags
-                  tags={genres}
-                  delimiters={delimiters}
-                  handleDelete={handleDeleteGenre}
-                  handleAddition={handleAdditionGenre}
-                  handleDrag={handleDragGenre}
-                  handleTagClick={handleTagClick}
-                  inputFieldPosition="inline"
-                  autocomplete
-                  editable
-                />
-              </li>
-              <li>
-                <label>Publisher</label>
-                <ReactTags
-                  tags={publishers}
-                  delimiters={delimiters}
-                  handleDelete={handleDeletePublisher}
-                  handleAddition={handleAdditionPublisher}
-                  handleDrag={handleDragPublisher}
-                  handleTagClick={handleTagClick}
-                  inputFieldPosition="inline"
-                  autocomplete
-                  editable
-                />
-              </li>
-              <li>
-                <label>ISBN</label>
-                <input type="text" onChange={(e) => setISBN(e.target.value)} />
-              </li>
+            <div className="mb-3">
+              <table style={{ width: "100%" }}>
+                <tr>
+                  <th>Title</th>
+                  <td>
+                    <ReactTags
+                      tags={titles}
+                      delimiters={delimiters}
+                      handleDelete={handleDeleteTitle}
+                      handleAddition={handleAdditionTitle}
+                      handleDrag={handleDragTitle}
+                      handleTagClick={handleTagClick}
+                      inputFieldPosition="inline"
+                      autocomplete
+                      editable
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Content</th>
+                  <td>
+                    <ReactTags
+                      tags={content}
+                      delimiters={delimiters}
+                      handleDelete={handleDeleteContent}
+                      handleAddition={handleAdditionContent}
+                      handleDrag={handleDragContent}
+                      handleTagClick={handleTagClick}
+                      inputFieldPosition="inline"
+                      autocomplete
+                      editable
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Author</th>
+                  <td>
+                    <ReactTags
+                      tags={authors}
+                      delimiters={delimiters}
+                      handleDelete={handleDeleteAuthor}
+                      handleAddition={handleAdditionAuthor}
+                      handleDrag={handleDragAuthor}
+                      handleTagClick={handleTagClick}
+                      inputFieldPosition="inline"
+                      autocomplete
+                      editable
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Genre</th>
+                  <td>
+                    <ReactTags
+                      tags={genres}
+                      delimiters={delimiters}
+                      handleDelete={handleDeleteGenre}
+                      handleAddition={handleAdditionGenre}
+                      handleDrag={handleDragGenre}
+                      handleTagClick={handleTagClick}
+                      inputFieldPosition="inline"
+                      autocomplete
+                      editable
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Publisher</th>
+                  <td>
+                    <ReactTags
+                      tags={publishers}
+                      delimiters={delimiters}
+                      handleDelete={handleDeletePublisher}
+                      handleAddition={handleAdditionPublisher}
+                      handleDrag={handleDragPublisher}
+                      handleTagClick={handleTagClick}
+                      inputFieldPosition="inline"
+                      autocomplete
+                      editable
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>ISBN</th>
+                  <td>
+                    <input
+                      type="text"
+                      onChange={(e) => setISBN(e.target.value)}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th style={{ marginRight: "30%" }}>Published</th>
+                  <td>
+                    <div className="d-flex" style={{ paddingLeft: "19%" }}>
+                      <div className="mr-5">
+                        <Dropdown onSelect={handlePublished} >
+                          <Dropdown.Toggle variant="primary" id="">
+                            {published.duration || "Duration"}
+                          </Dropdown.Toggle>
 
-              <li>
-                <label>Published</label>
-                <Dropdown onSelect={handlePublished}>
-                  <Dropdown.Toggle variant="primary" id="">
-                    {published.duration}
-                  </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                            <Dropdown.Item eventKey="Before">
+                              Before
+                            </Dropdown.Item>
+                            <Dropdown.Item eventKey="After">
+                              After
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
 
-                  <Dropdown.Menu>
-                    <Dropdown.Item eventKey="Before">Before</Dropdown.Item>
-                    <Dropdown.Item eventKey="After">After</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
+                      <div className="">
+                        <Dropdown onSelect={handlePublished}>
+                          <Dropdown.Toggle variant="primary" id="year-dropdown">
+                            {published.year || "Year"}
+                          </Dropdown.Toggle>
 
-                <Dropdown onSelect={handlePublished}>
-                  <Dropdown.Toggle variant="primary" id="year-dropdown">
-                    {published.year}
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu>
-                    {yearOptions.map((year) => (
-                      <Dropdown.Item key={year} eventKey={year}>
-                        {year}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </li>
-            </ul>
-
+                          <Dropdown.Menu>
+                            {yearOptions.map((year) => (
+                              <Dropdown.Item key={year} eventKey={year}>
+                                {year}
+                              </Dropdown.Item>
+                            ))}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
             <div className="mb-5">
               <button
                 type="submit"
-                className="btn btn-primary"
+                className="btn btn-success"
                 disabled={submitting}
               >
                 Search
