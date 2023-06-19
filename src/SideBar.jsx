@@ -144,12 +144,12 @@ const SideBar = ({
     if (eventKey === "Before") {
       setPublished({
         ...published,
-        duration: "before",
+        duration: "Before",
       });
     } else if (eventKey === "After") {
       setPublished({
         ...published,
-        duration: "after",
+        duration: "After",
       });
     } else {
       setPublished({
