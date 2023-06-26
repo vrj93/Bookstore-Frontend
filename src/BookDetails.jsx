@@ -140,7 +140,7 @@ const BookDetails = () => {
     } else {
       console.log("Something went wrong");
     }
-    
+
     setSpinning(false);
   };
 
@@ -403,12 +403,21 @@ const BookDetails = () => {
             </div>
             <div className="col-lg-4">
               <img
-                src={`${import.meta.env.VITE_APP_IMG_PATH}/${
-                  bookDetails.cover
-                }`}
+                src={
+                  imageURL ||
+                  (bookDetails.cover
+                    ? `${import.meta.env.VITE_APP_SERVER_IMG_PATH}/${
+                        bookDetails.cover
+                      }`
+                    : `${import.meta.env.VITE_APP_IMG_PATH}/no_cover.png`)
+                }
                 alt=""
                 srcSet=""
-                style={{ height: 350, width: auto }}
+                style={{
+                  maxHeight: 400,
+                  maxWidth: 250,
+                  cursor: "pointer",
+                }}
               />
             </div>
           </div>
